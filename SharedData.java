@@ -6,7 +6,7 @@ public class SharedData {
 	private static SharedData uniqueData=new SharedData(); //Eager Instantiation
 	private static ArrayList<Integer> generatedList=new ArrayList<Integer>();
 	
-	public boolean[] playerChanceFlags = new boolean[20];
+	public boolean[] playerChanceFlags = new boolean[8]; //keeps track of the players that have already had their chance in this turn
 
 	public int announcedNumber; //the number announced by moderator in this turn
 	public boolean numberAnnouncedFlag = false;
@@ -31,12 +31,11 @@ public class SharedData {
 		announcedNumber=rand.nextInt(51);
 		generatedList.add(announcedNumber);
 		generatedIndex++;
-		System.out.println("Moderator generated "+announcedNumber);
 	}
 	
 	//checks if there is any player remaining that hasn't got his chance
 	public boolean anyPlayerRemaining() {
-		for(int i=0;i<20;i++) {
+		for(int i=0;i<8;i++) {
 			if(!playerChanceFlags[i]) {
 				return true;
 			}

@@ -12,7 +12,7 @@ public class Moderator implements Runnable {
 			while (!sharedData.winnerFoundFlag && sharedData.generatedIndex<10) { //moderator generates numbers till winner not found
 				sharedData.numberAnnouncedFlag = false;
 				
-				//Moderator will announce number after sleep
+				//Moderator will announce number after some delay
 				try {
 					Thread.sleep(800);
 				} 
@@ -20,17 +20,18 @@ public class Moderator implements Runnable {
 					e.printStackTrace();
 				}
 				
-				//reset the chance flags for every new number
-				sharedData.playerChanceFlags=new boolean[20];
+				sharedData.playerChanceFlags=new boolean[8]; //reset the player chance flags for every new number
+				
 				sharedData.generateNumber();
+				System.out.println("Moderator generated: "+sharedData.announcedNumber);
+				
 				sharedData.numberAnnouncedFlag = true;
-				//notifies the player threads
-				sharedData.lock.notifyAll();
+				sharedData.lock.notifyAll(); //wakes all the player threads waiting for the shared resource
 				
 				//wait for all player threads to finish
 				while(sharedData.anyPlayerRemaining()) {
 					try {
-						sharedData.lock.wait(); 
+						sharedData.lock.wait(); //waiting for chance to access the shared resource
 					} 
 					catch (InterruptedException e) {
 						e.printStackTrace();
@@ -42,8 +43,9 @@ public class Moderator implements Runnable {
 				System.out.println("\n***** Game complete. No winners found. *****\n");
 			}
 			
+			//set gameFinishedFlag so that player threads also terminate
 			sharedData.gameFinishedFlag = true; 
-			sharedData.lock.notifyAll(); 
+			sharedData.lock.notifyAll(); //wakes all the player threads waiting for the shared resource
 		}
 	}
 
