@@ -40,7 +40,7 @@ public class Moderator implements Runnable {
 			}
 			
 			if(!sharedData.winnerFoundFlag) {
-				System.out.println("\n***** Game complete. No winners found. *****\n");
+				System.out.println("\n***** Game complete. No winner found. *****\n");
 			}
 			
 			//set gameFinishedFlag so that player threads also terminate

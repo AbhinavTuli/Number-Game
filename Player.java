@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -47,7 +50,6 @@ public class Player implements Runnable{
 	private int totalMatchesFound; //count of how many matches found on ticket
 	
 	
-	
 	private Player() {	
 	}
 	
@@ -66,11 +68,32 @@ public class Player implements Runnable{
 	}
 	
 	public void printPlayerTicket() {
-		System.out.print("Player"+id+" ticket:");
-		for(int i=0;i<ticket.length;i++) {
-			System.out.print(" "+ticket[i]);
+		BufferedWriter log = new BufferedWriter(new OutputStreamWriter(System.out));
+
+		try{
+			log.write("Player"+id+" ticket:");
+			log.flush();
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
 		}
-		System.out.println();
+		
+		for(int i=0;i<ticket.length;i++) {
+			try{
+				log.write(" "+ticket[i]);
+				log.flush();
+			} 
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		try{
+			log.write("\n");
+			log.flush();
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public int getTotalMatchesFound() {
@@ -88,7 +111,6 @@ public class Player implements Runnable{
 		}
 	}
 	
-	@Override
 	public void run() {
 		synchronized(sharedData.lock) {	
 			
